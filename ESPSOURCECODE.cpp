@@ -10,7 +10,7 @@ char pass[] = "Sairam#009";
 char auth[] = "cLjui-Mq7V4_EzqTGT-YyVV2QKanmajF";
 
 
-#define RELAY_PIN D5        // Relay pin (GPIO14)
+#define RELAY_PIN D5        
 #define MANUAL_BUTTON_PIN D6
 #define MODE_BUTTON_PIN D0
 
