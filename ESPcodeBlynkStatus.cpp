@@ -3,31 +3,6 @@
 #include <ESP8266WiFi.h>
 #include <BlynkSimpleEsp8266.h>
 
-// Blynk authentication token
-char auth[] = "YOUR_BLYNK_AUTH_TOKEN";  // Replace with your Blynk Auth Token
-char ssid[] = "YOUR_WIFI_SSID";         // Replace with your WiFi SSID
-char pass[] = "YOUR_WIFI_PASSWORD";     // Replace with your WiFi Password
-
-// Pin Definitions for HC-SR04
-#define TRIG_PIN D1  // Trigger pin of the HC-SR04 connected to GPIO D1
-#define ECHO_PIN D2  // Echo pin of the HC-SR04 connected to GPIO D2
-
-// Blynk Virtual Pin
-#define VPIN_DISTANCE V5  // Virtual Pin to send distance reading to Blynk
-
-// Variables for ultrasonic sensor readings
-long duration;
-float distance;
-
-void setup() {
-  // Initialize Serial Monitor
-  Serial.begin(115200);
-  
-  // Init…
-[12:17 pm, 17/10/2024] Anumula Samarth: #define BLYNK_PRINT Serial
-#include <ESP8266WiFi.h>
-#include <BlynkSimpleEsp8266.h>
-
 char ssid[] = "Sarvavyapi";
 char pass[] = "Sairam#009";
 char auth[] = "cLjui-Mq7V4_EzqTGT-YyVV2QKanmajF";
