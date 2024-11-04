@@ -1,4 +1,3 @@
-/**
  * @file       BlynkSimpleEsp8266.h
  * @author     Volodymyr Shymanskyy
  * @license    This project is released under the MIT License (MIT)
