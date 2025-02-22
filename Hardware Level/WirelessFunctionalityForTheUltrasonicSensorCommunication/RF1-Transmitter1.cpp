@@ -1,7 +1,6 @@
 //This code is made to test the RF Transreciever where the Transmitter sends a number in the range of 0-100 for every second and reciever takes it.
 //Problems Found: Range is 700m and numbers such as 0 are not recieved. Line of sight must be clear.
 #include <RCSwitch.h>
-
 RCSwitch mySwitch = RCSwitch();
 int numberToSend = 0;
 
