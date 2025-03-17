@@ -1,0 +1,126 @@
+These are the Final Working Codes (the range of working is even lesser than 30 cm ( -_・)ノ) for now and I believe we must purchase Antennas for the LoRa's to workout...
+
+Update: we have obtained suitable antennae and cables and setup the LoRa's they are working fine and are applicable for the project.
+
+Reciever Code:
+
+#include <SPI.h>
+#include <LoRa.h>
+
+#define LORA_SS_PIN     15  // D8
+#define LORA_RST_PIN    16  // D0
+#define LORA_DI0_PIN    5   // D1
+
+void setup() {
+  Serial.begin(115200);
+  delay(2000);
+
+  pinMode(LED_BUILTIN, OUTPUT);
+  digitalWrite(LED_BUILTIN, HIGH);
+
+  pinMode(LORA_RST_PIN, OUTPUT);
+  digitalWrite(LORA_RST_PIN, LOW);
+  delay(10);
+  digitalWrite(LORA_RST_PIN, HIGH);
+  delay(10);
+
+  LoRa.setPins(LORA_SS_PIN, LORA_RST_PIN, LORA_DI0_PIN);
+
+  if (!LoRa.begin(433E6)) {
+    Serial.println("LoRa Initialization Failed!");
+    while (1);
+  }
+
+  LoRa.setSpreadingFactor(7);
+  LoRa.setSignalBandwidth(125E3);
+  LoRa.setCodingRate4(5);
+  LoRa.enableCrc();
+  LoRa.receive();  // Ensure module stays in receive mode
+
+  Serial.println("LoRa Receiver Initialized!");
+}
+
+void loop() {
+  int packetSize = LoRa.parsePacket();
+  if (packetSize) {
+    delay(10);  // Allow time for processing
+    String message = "";
+    while (LoRa.available()) {
+      message += (char)LoRa.read();
+    }
+
+    Serial.print("Received packet: '");
+    Serial.print(message);
+    Serial.print("', RSSI: ");
+    Serial.print(LoRa.packetRssi());
+    Serial.println(" dBm");
+
+    digitalWrite(LED_BUILTIN, LOW);
+    delay(50);
+    digitalWrite(LED_BUILTIN, HIGH);
+  }
+}
+
+Transmitter Code:
+
+//Transmitter
+#include <SPI.h>
+#include <LoRa.h>
+
+#define LORA_SS_PIN     15  // D8
+#define LORA_RST_PIN    16  // D0
+#define LORA_DI0_PIN    5   // D1
+
+int messageCount = 0;
+unsigned long lastSendTime = 0;
+const int sendInterval = 5000;  // 5 seconds between messages
+
+void setup() {
+  Serial.begin(115200);
+  delay(2000);
+
+  pinMode(LED_BUILTIN, OUTPUT);
+  digitalWrite(LED_BUILTIN, HIGH); // Turn off LED (ESP8266 LED is active LOW)
+
+  pinMode(LORA_RST_PIN, OUTPUT);
+  digitalWrite(LORA_RST_PIN, LOW);
+  delay(10);
+  digitalWrite(LORA_RST_PIN, HIGH);
+  delay(10);
+
+  LoRa.setPins(LORA_SS_PIN, LORA_RST_PIN, LORA_DI0_PIN);
+
+  if (!LoRa.begin(433E6)) {  // Set to your module's frequency
+    Serial.println("LoRa Initialization Failed!");
+    while (1);
+  }
+
+  LoRa.setSpreadingFactor(7);  
+  LoRa.setSignalBandwidth(125E3);
+  LoRa.setCodingRate4(5);
+  LoRa.enableCrc();
+  LoRa.setTxPower(20, PA_OUTPUT_PA_BOOST_PIN);
+
+  Serial.println("LoRa Transmitter Initialized!");
+}
+
+void loop() {
+  if (millis() - lastSendTime > sendInterval) {
+    lastSendTime = millis();
+    
+    Serial.print("Sending packet: ");
+    Serial.println(messageCount);
+
+    LoRa.beginPacket();
+    LoRa.print("Message #");
+    LoRa.print(messageCount);
+    LoRa.endPacket();
+
+    Serial.println("Packet sent!");
+    digitalWrite(LED_BUILTIN, LOW);
+    delay(100);
+    digitalWrite(LED_BUILTIN, HIGH);
+
+    messageCount++;
+  }
+}
